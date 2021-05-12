@@ -32,3 +32,4 @@ Este algoritmo parte de uma estimativa inicial para o custo mínimo e vai sucess
 <p align="center">
   <img src="https://www.ic.unicamp.br/~meidanis/courses/mo417/2010s1/pool/ra_033072_img/grafo_dijkstra.jpg" />
 </p>
+
