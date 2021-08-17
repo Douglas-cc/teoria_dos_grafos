@@ -1,7 +1,7 @@
 # Algoritmos de Busca
 
 - Busca em Largura
-- Busca em Profunda
+- Busca em Profundidade
 - Dijkstra
 
 ## Busca em Largura 
