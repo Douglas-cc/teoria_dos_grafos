@@ -1,9 +1,10 @@
 from collections import defaultdict
 
+
 class Grafo:
     '''
     Este metodo tem o papael de criar um objeto de lista 
-    para adicionar as areas que vão compor o nosso grafo
+    para adicionar as arestas que vão compor o nosso grafo
     '''
     def __init__(self):
         self.grafo = defaultdict(list)
@@ -11,9 +12,11 @@ class Grafo:
     # Adiciona os vertices anterior e posterior na lista para formar o grafo
     def adiciona_vertices(self, anterior, posterior):
         self.grafo[anterior].append(posterior)
-    
-    def busca_largura(self, vertice_atual):
         
+    def exibir_grafo(self):
+        return self.grafo
+    
+    def bfs(self, vertice_atual):
         # Marcar os vertices como não visitados
         visitado = [False] * (len(self.grafo))
 
@@ -24,8 +27,7 @@ class Grafo:
         fila.append(vertice_atual)
         visitado[vertice_atual] = True
 
-        while fila:
-            
+        while fila:     
             # Retira o utimo vertice 
             vertice_atual = fila.pop(0)
             print(vertice_atual)
@@ -38,8 +40,7 @@ class Grafo:
                     visitado[i] = True
 
 
-    def busca_profunda(self, raiz):
-
+    def dfs(self, raiz):
         visitados = [] # lista para armazenar os vertices visitados
         visitados.append(raiz) # e obviamente a raiz é o primeiro vertice a ser visitado
         
@@ -49,7 +50,6 @@ class Grafo:
         '''
         nao_visitado = [raiz] 
         while nao_visitado:
-            
             '''
             quando o vertice for visitado nos excluimos ele da lista de não vistados
             e atuaçozamos na variavel vertice para imprimir nossa rota na tela

@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "teoria-grafos"
+version = "0.1.0"
+description = ""
+authors = ["Douglas-cc <douglasdasilvasousa8@gmail.com>"]
+readme = "README.md"
+packages = [{include = "teoria_grafos"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+networkx = "^3.1"
+pandas = "^2.0.3"
+numpy = "^1.25.1"
+igraph = "^0.10.6"
+matplotlib = "^3.7.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.24.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
