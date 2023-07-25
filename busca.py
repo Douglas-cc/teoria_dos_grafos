@@ -1,46 +1,30 @@
 from collections import defaultdict
 
-
 class Grafo:
     '''
     Este metodo tem o papael de criar um objeto de lista 
     para adicionar as arestas que vão compor o nosso grafo
     '''
-    def __init__(self):
+    def __init__(self, num_vertices, eh_direcionado):
+        self.tempo = 0
+        self.eh_direcionado = eh_direcionado
+        self.num_vertices = num_vertices
+        self.pre = [0]*num_vertices
+        self.pos = [0]*num_vertices
         self.grafo = defaultdict(list)
+
 
     # Adiciona os vertices anterior e posterior na lista para formar o grafo
     def adiciona_vertices(self, anterior, posterior):
-        self.grafo[anterior].append(posterior)
-        
+        if self.eh_direcionado:
+            self.grafo[anterior].append(posterior)
+        else:
+            self.grafo[posterior].append(anterior)
+                 
     def exibir_grafo(self):
         return self.grafo
     
-    def bfs(self, vertice_atual):
-        # Marcar os vertices como não visitados
-        visitado = [False] * (len(self.grafo))
-
-        # fila vazia para busca em largura
-        fila = []
-
-        # Guardar vertice de origem/atual e marca como visitado e insere na fila
-        fila.append(vertice_atual)
-        visitado[vertice_atual] = True
-
-        while fila:     
-            # Retira o utimo vertice 
-            vertice_atual = fila.pop(0)
-            print(vertice_atual)
-
-            # Obter todos os vertices adjacentes dos vertices desenfilerados
-            for i in self.grafo[vertice_atual]:
-                # print(visitado[i])
-                if visitado[i] == False:
-                    fila.append(i)
-                    visitado[i] = True
-
-
-    def dfs(self, raiz):
+    def busca_profunda(self, raiz):
         visitados = [] # lista para armazenar os vertices visitados
         visitados.append(raiz) # e obviamente a raiz é o primeiro vertice a ser visitado
         
@@ -67,3 +51,26 @@ class Grafo:
                 if i not in visitados:
                     visitados.append(i)
                     nao_visitado.append(i)
+                                    
+    def busca_largura(self, vertice_atual):
+        # Marcar os vertices como não visitados
+        visitado = [False] * (len(self.grafo))
+
+        # fila vazia para busca em largura
+        fila = []
+
+        # Guardar vertice de origem/atual e marca como visitado e insere na fila
+        fila.append(vertice_atual)
+        visitado[vertice_atual] = True
+
+        while fila:     
+            # Retira o utimo vertice 
+            vertice_atual = fila.pop(0)
+            print(vertice_atual)
+
+            # Obter todos os vertices adjacentes dos vertices desenfilerados
+            for i in self.grafo[vertice_atual]:
+                # print(visitado[i])
+                if visitado[i] == False:
+                    fila.append(i)
+                    visitado[i] = True
