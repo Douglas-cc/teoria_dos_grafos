@@ -33,3 +33,28 @@ Este algoritmo parte de uma estimativa inicial para o custo mínimo e vai sucess
   <img src="https://www.ic.unicamp.br/~meidanis/courses/mo417/2010s1/pool/ra_033072_img/grafo_dijkstra.jpg" />
 </p>
 
+# Como instalar as dependências do projeto
+
+- Instalando versão python com pyenv 
+```bash
+pyenv install 3.10.0
+```
+
+- Definindo versão local do projeto
+```bash
+pyenv local 3.10.0
+```
+
+- Criando um ambiente virtual com versão de cima do Python
+```bash 
+poetry env use 3.10
+```
+
+- Iniciar o ambiente virtual
+```bash 
+poetry shell
+```
+- Instalar bibliotecas python .toml
+```bash 
+poetry install
+```
