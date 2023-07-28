@@ -1,76 +1,133 @@
+import networkx as nx
+import matplotlib.pyplot as plt
 from collections import defaultdict
 
+
 class Grafo:
-    '''
-    Este metodo tem o papael de criar um objeto de lista 
-    para adicionar as arestas que vão compor o nosso grafo
-    '''
-    def __init__(self, num_vertices, eh_direcionado):
-        self.tempo = 0
-        self.eh_direcionado = eh_direcionado
-        self.num_vertices = num_vertices
-        self.pre = [0]*num_vertices
-        self.pos = [0]*num_vertices
+    def __init__(self, eh_direcionado):
+        self.tempo = 1
         self.grafo = defaultdict(list)
-
-
-    # Adiciona os vertices anterior e posterior na lista para formar o grafo
-    def adiciona_vertices(self, anterior, posterior):
-        if self.eh_direcionado:
-            self.grafo[anterior].append(posterior)
-        else:
-            self.grafo[posterior].append(anterior)
-                 
-    def exibir_grafo(self):
-        return self.grafo
-    
-    def busca_profunda(self, raiz):
-        visitados = [] # lista para armazenar os vertices visitados
-        visitados.append(raiz) # e obviamente a raiz é o primeiro vertice a ser visitado
+        self.eh_direcionado = eh_direcionado
+        self._vertices = []
+        self._num_vertices = 0
+        self._pre_ordem = [0] * self._num_vertices
+        self._pos_ordem = [0] * self._num_vertices
         
-        '''
-        Na lista pegamos aqueles vertices não visitados e enquanto não visitarmos 
-        todos os vetices o loop continua fazendo a busca do nosso vertice final
-        '''
-        nao_visitado = [raiz] 
+
+    @property
+    def num_vertices(self):
+        return self._num_vertices
+
+
+    @num_vertices.setter
+    def num_vertices(self, value):
+        self._num_vertices = value
+        self._pre_ordem = [0]*value
+        self._pos_ordem = [0]*value
+
+
+    @property
+    def pre_ordem(self):
+        return self._pre_ordem
+    
+    @property
+    def pos_ordem(self):
+        return self._pos_ordem
+        
+    @property
+    def vertices(self):
+        return set(self._vertices)
+    
+    
+    @vertices.setter
+    def vertices(self, value):
+        self._vertices.append(value)
+        
+
+    def adiciona_vertices(self, origem, destino):
+        self.vertices = origem
+        self.vertices = destino
+        self.num_vertices = len(self.vertices)
+        
+        self.grafo[origem].append(destino)
+        if not self.eh_direcionado:
+            self.grafo[destino].append(origem)
+            
+
+    def exibir_grafo(self):
+        print("Lista de adjacência do grafo:")
+        for k, v in zip(self.grafo.keys(), self.grafo.values()):
+            print(f'{k}: {v}')    
+
+
+    def plot_grafo(self):
+        G = nx.DiGraph() if self.eh_direcionado else nx.Graph()
+        for origem, destinos in self.grafo.items():
+            for destino in destinos:
+               print(f'Origem {origem} -> Destino {destino}')
+               G.add_edge(origem, destino)
+        print()
+        plt.figure(figsize=(6, 4))
+        pos = nx.spring_layout(G)  
+        nx.draw(
+            G,
+            pos,
+            with_labels=True,
+            node_size=1000,
+            node_color='lightblue',
+            arrowsize=20
+        )
+        plt.title('Grafo')
+        plt.show()
+    
+
+    def pre_pos_ordem(self):                
+        print("Tempo de visita da pré e pós-ordem:")
+        for i in range(self.num_vertices):
+            print(f"Vértice {i} ({self.pre_ordem[i]}/{self.pos_ordem[i]})")     
+              
+                                                                                              
+    def busca_profunda(self, vertice_origem):
+        visitados = [] 
+        visitados.append(vertice_origem)         
+        nao_visitado = [vertice_origem] 
+        
+        print('Buscam em Profundidade: ')
         while nao_visitado:
-            '''
-            quando o vertice for visitado nos excluimos ele da lista de não vistados
-            e atuaçozamos na variavel vertice para imprimir nossa rota na tela
-            '''
+            # Reposta
             vertice = nao_visitado.pop()
-            # resposta da nossa busca!!1
+            self._pre_ordem[vertice - 1] = self.tempo
+            self.tempo += 1
             print(vertice)
 
-            '''
-            Varremos os vizinhos de dos vertices e verificamos se eles já foram visitados 
-            se já foram visitados fazemos o appende na lista correspondente caso o contrario
-            executamos a operação inversa.
-            '''
             for i in self.grafo[vertice]:
                 if i not in visitados:
                     visitados.append(i)
                     nao_visitado.append(i)
+                    
+                self._pos_ordem[vertice - 1] = self.tempo
+                self.tempo += 1
+                    
                                     
-    def busca_largura(self, vertice_atual):
-        # Marcar os vertices como não visitados
-        visitado = [False] * (len(self.grafo))
+    # def busca_largura(self, vertice_atual):
+    #     # Marcar os vertices como não visitados
+    #     visitado = [False] * (len(self.grafo))
 
-        # fila vazia para busca em largura
-        fila = []
+    #     # fila vazia para busca em largura
+    #     fila = []
 
-        # Guardar vertice de origem/atual e marca como visitado e insere na fila
-        fila.append(vertice_atual)
-        visitado[vertice_atual] = True
+    #     # Guardar vertice de origem/atual e marca como visitado e insere na fila
+    #     fila.append(vertice_atual)
+    #     visitado[vertice_atual] = True
 
-        while fila:     
-            # Retira o utimo vertice 
-            vertice_atual = fila.pop(0)
-            print(vertice_atual)
+    #     while fila:     
+    #         # Retira o utimo vertice 
+    #         vertice_atual = fila.pop(0)
+    #         print(vertice_atual)
 
-            # Obter todos os vertices adjacentes dos vertices desenfilerados
-            for i in self.grafo[vertice_atual]:
-                # print(visitado[i])
-                if visitado[i] == False:
-                    fila.append(i)
-                    visitado[i] = True
+    #         # Obter todos os vertices adjacentes dos vertices desenfilerados
+    #         for i in self.grafo[vertice_atual]:
+    #             # print(visitado[i])
+    #             if visitado[i] == False:
+    #                 fila.append(i)
+    #                 visitado[i] = True
