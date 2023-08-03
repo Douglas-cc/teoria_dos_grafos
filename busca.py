@@ -55,18 +55,28 @@ class Grafo:
             
 
     def exibir_grafo(self):
-        print("Lista de adjacência do grafo:")
-        for k, v in zip(self.grafo.keys(), self.grafo.values()):
-            print(f'{k}: {v}')    
-
-
-    def plot_grafo(self):
-        G = nx.DiGraph() if self.eh_direcionado else nx.Graph()
         for origem, destinos in self.grafo.items():
             for destino in destinos:
                print(f'Origem {origem} -> Destino {destino}')
+    
+    
+    def max_arestas(self):
+        return self.num_vertices*(self.num_vertices - 1)/2
+    
+    
+    def total_arestas(self):
+        total = 0
+        for origem, destinos in self.grafo.items():
+            for destino in destinos:
+                total += 1
+        return total
+    
+
+    def plot_grafo(self, color_vertices='lightblue'):
+        G = nx.DiGraph() if self.eh_direcionado else nx.Graph()
+        for origem, destinos in self.grafo.items():
+            for destino in destinos:
                G.add_edge(origem, destino)
-        print()
         plt.figure(figsize=(6, 4))
         pos = nx.spring_layout(G)  
         nx.draw(
@@ -74,7 +84,7 @@ class Grafo:
             pos,
             with_labels=True,
             node_size=1000,
-            node_color='lightblue',
+            node_color=color_vertices,
             arrowsize=20
         )
         plt.title('Grafo')
@@ -87,19 +97,24 @@ class Grafo:
             print(f"Vértice {i} ({self.pre_ordem[i]}/{self.pos_ordem[i]})")     
               
                                                                                               
-    def busca_profunda(self, vertice_origem):
+    def busca_profunda(self, vertice_origem, logs=True):
+        resultado = []
         visitados = [] 
         visitados.append(vertice_origem)         
         nao_visitado = [vertice_origem] 
         
-        print('Buscam em Profundidade: ')
+        if logs:   
+            print('Buscam em Profundidade: ')
+            
         while nao_visitado:
-            # Reposta
             vertice = nao_visitado.pop()
             self._pre_ordem[vertice - 1] = self.tempo
             self.tempo += 1
-            print(vertice)
-
+            
+            if logs:
+                print(vertice)
+            resultado.append(vertice)
+            
             for i in self.grafo[vertice]:
                 if i not in visitados:
                     visitados.append(i)
@@ -107,6 +122,7 @@ class Grafo:
                     
                 self._pos_ordem[vertice - 1] = self.tempo
                 self.tempo += 1
+        return resultado
                     
                                     
     # def busca_largura(self, vertice_atual):
