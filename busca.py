@@ -6,8 +6,8 @@ from collections import defaultdict
 class Grafo:
     def __init__(self, eh_direcionado):
         self.tempo = 1
-        self.grafo = defaultdict(list)
         self.eh_direcionado = eh_direcionado
+        self._grafo = defaultdict(list)
         self._vertices = []
         self._num_vertices = 0
         self._pre_ordem = [0] * self._num_vertices
@@ -17,6 +17,14 @@ class Grafo:
     @property
     def num_vertices(self):
         return self._num_vertices
+
+    @property
+    def grafo(self):
+        return self._grafo
+
+    @grafo.setter
+    def grafo(self, new_grafo) -> dict:
+        self._grafo = new_grafo
 
 
     @num_vertices.setter
@@ -42,8 +50,8 @@ class Grafo:
     @vertices.setter
     def vertices(self, value):
         self._vertices.append(value)
-        
-
+                
+                
     def adiciona_vertices(self, origem, destino):
         self.vertices = origem
         self.vertices = destino
@@ -71,6 +79,36 @@ class Grafo:
                 total += 1
         return total
     
+    
+    def convert_nao_direcional(self):    
+        grafo_convertido = defaultdict(list)
+        
+        for key, value in self.grafo.items():
+            for i in range(len(value)):
+                print(f'adicionar: {key} -> {value[i]}')
+                grafo_convertido[key].append(value[i])
+                print(f'adicionar: {value[i]} <- {key}')
+                grafo_convertido[value[i]].append(key)
+                
+        self.eh_direcionado = False
+        self.grafo = grafo_convertido
+        return {"Grafo direcional convertido para não direcional"}
+    
+
+    def qtd_componentes(self, grafo, vertices):
+        buscas = [sorted(self.busca_profunda(grafo, i, logs=False)) for i in vertices]
+        
+        novas_buscas = []
+        for busca in buscas:
+          if busca not in novas_buscas:
+            novas_buscas.append(busca)
+        
+        qtd_components = len(novas_buscas)    
+        if qtd_components > 1:
+            return f'Grafo é desconexo e tem {qtd_components} components'
+        else:
+            return 'O grafo é conexo'
+
 
     def plot_grafo(self, color_vertices='lightblue'):
         G = nx.DiGraph() if self.eh_direcionado else nx.Graph()
@@ -95,9 +133,9 @@ class Grafo:
         print("Tempo de visita da pré e pós-ordem:")
         for i in range(self.num_vertices):
             print(f"Vértice {i} ({self.pre_ordem[i]}/{self.pos_ordem[i]})")     
-              
+                          
                                                                                               
-    def busca_profunda(self, vertice_origem, logs=True):
+    def busca_profunda(self, grafo, vertice_origem, logs=True):
         resultado = []
         visitados = [] 
         visitados.append(vertice_origem)         
@@ -115,7 +153,8 @@ class Grafo:
                 print(vertice)
             resultado.append(vertice)
             
-            for i in self.grafo[vertice]:
+            # for i in self.grafo[vertice]:
+            for i in grafo[vertice]:
                 if i not in visitados:
                     visitados.append(i)
                     nao_visitado.append(i)
