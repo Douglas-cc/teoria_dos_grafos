@@ -153,7 +153,6 @@ class Grafo:
                 print(vertice)
             resultado.append(vertice)
             
-            # for i in self.grafo[vertice]:
             for i in grafo[vertice]:
                 if i not in visitados:
                     visitados.append(i)
@@ -164,7 +163,7 @@ class Grafo:
         return resultado
                     
                                     
-    # def busca_largura(self, vertice_atual):
+    # def busca_largura(self, grafo, vertice_origem):
     #     # Marcar os vertices como não visitados
     #     visitado = [False] * (len(self.grafo))
 
@@ -172,8 +171,8 @@ class Grafo:
     #     fila = []
 
     #     # Guardar vertice de origem/atual e marca como visitado e insere na fila
-    #     fila.append(vertice_atual)
-    #     visitado[vertice_atual] = True
+    #     fila.append(vertice_origem)
+    #     visitado[vertice_origem] = True
 
     #     while fila:     
     #         # Retira o utimo vertice 
@@ -181,7 +180,7 @@ class Grafo:
     #         print(vertice_atual)
 
     #         # Obter todos os vertices adjacentes dos vertices desenfilerados
-    #         for i in self.grafo[vertice_atual]:
+    #         for i in grafo[vertice_atual]:
     #             # print(visitado[i])
     #             if visitado[i] == False:
     #                 fila.append(i)
