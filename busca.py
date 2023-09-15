@@ -95,21 +95,6 @@ class Grafo:
         return {"Grafo direcional convertido para não direcional"}
     
 
-    def qtd_componentes(self, grafo, vertices):
-        buscas = [sorted(self.busca_profunda(grafo, i)) for i in vertices]
-        
-        novas_buscas = []
-        for busca in buscas:
-          if busca not in novas_buscas:
-            novas_buscas.append(busca)
-        
-        qtd_components = len(novas_buscas)    
-        if qtd_components > 1:
-            return f'Grafo é desconexo e tem {qtd_components} components'
-        else:
-            return 'O grafo é conexo'
-
-
     def plot_grafo(self, color_vertices='lightblue'):
         G = nx.DiGraph() if self.eh_direcionado else nx.Graph()
         for origem, destinos in self.grafo.items():
