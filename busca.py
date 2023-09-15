@@ -96,7 +96,7 @@ class Grafo:
     
 
     def qtd_componentes(self, grafo, vertices):
-        buscas = [sorted(self.busca_profunda(grafo, i, logs=False)) for i in vertices]
+        buscas = [sorted(self.busca_profunda(grafo, i)) for i in vertices]
         
         novas_buscas = []
         for busca in buscas:
@@ -135,23 +135,15 @@ class Grafo:
             print(f"Vértice {i} ({self.pre_ordem[i]}/{self.pos_ordem[i]})")     
                           
                                                                                               
-    def busca_profunda(self, grafo, vertice_origem, logs=True):
-        resultado = []
-        visitados = [] 
+    def busca_profunda(self, grafo, vertice_origem):
+        visitados, nao_visitado = [], [vertice_origem] 
         visitados.append(vertice_origem)         
-        nao_visitado = [vertice_origem] 
-        
-        if logs:   
-            print('Buscam em Profundidade: ')
-            
+
+        print("Busca Profunda")        
         while nao_visitado:
             vertice = nao_visitado.pop()
             self._pre_ordem[vertice - 1] = self.tempo
             self.tempo += 1
-            
-            if logs:
-                print(vertice)
-            resultado.append(vertice)
             
             for i in grafo[vertice]:
                 if i not in visitados:
@@ -159,29 +151,30 @@ class Grafo:
                     nao_visitado.append(i)
                     
                 self._pos_ordem[vertice - 1] = self.tempo
-                self.tempo += 1
-        return resultado
+                self.tempo += 1     
+        return visitados
                     
                                     
-    # def busca_largura(self, grafo, vertice_origem):
-    #     # Marcar os vertices como não visitados
-    #     visitado = [False] * (len(self.grafo))
+    def busca_largura(self, grafo, vertice_origem):
+        visitados, fila = [], [vertice_origem]
 
-    #     # fila vazia para busca em largura
-    #     fila = []
+        print("Busca em Largura")
+        while fila:
+            vertice = fila.pop(0)
+            self._pre_ordem[vertice - 1] = self.tempo
+            self.tempo += 1
 
-    #     # Guardar vertice de origem/atual e marca como visitado e insere na fila
-    #     fila.append(vertice_origem)
-    #     visitado[vertice_origem] = True
+            if vertice not in visitados:
+                visitados.append(vertice)
+                fila.extend(v for v in grafo[vertice] if v not in visitados)
 
-    #     while fila:     
-    #         # Retira o utimo vertice 
-    #         vertice_atual = fila.pop(0)
-    #         print(vertice_atual)
-
-    #         # Obter todos os vertices adjacentes dos vertices desenfilerados
-    #         for i in grafo[vertice_atual]:
-    #             # print(visitado[i])
-    #             if visitado[i] == False:
-    #                 fila.append(i)
-    #                 visitado[i] = True
+                self._pos_ordem[vertice - 1] = self.tempo
+                self.tempo += 1                   
+        return visitados
+    
+    
+    def busca_estrela(self, grafo):
+        pass
+    
+    def busca_gulosa(self, grafo):
+        pass
