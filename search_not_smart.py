@@ -156,10 +156,3 @@ class Grafo:
                 self._pos_ordem[vertice - 1] = self.tempo
                 self.tempo += 1                   
         return visitados
-    
-    
-    def busca_estrela(self, grafo):
-        pass
-    
-    def busca_gulosa(self, grafo):
-        pass
